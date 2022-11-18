@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_grade_manager/Cubit/Auth/auth_cubit.dart';
 import 'package:student_grade_manager/app_navigator.dart';
 
 void main() {
@@ -29,6 +31,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return AppNavigator();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthCubit(),
+        ),
+      ],
+      child: AppNavigator(),
+    );
   }
 }

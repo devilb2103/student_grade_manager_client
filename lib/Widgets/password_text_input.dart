@@ -26,6 +26,8 @@ class _PasswordTextInputState extends State<PasswordTextInput> {
       decoration: InputDecoration(
         suffixIcon: IconButton(
           color: Colors.black,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
           icon: Icon(
             // Based on passwordVisible state choose the icon
             _passwordVisible ? Icons.visibility : Icons.visibility_off,
