@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'dart:convert' as convert;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:student_grade_manager/network_vars.dart';
@@ -16,9 +15,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     emit(const ProcessingState());
     try {
-      var url = Uri.parse(
-        '$address/login',
-      );
       var res = await Dio()
           .post('$address/login', data: {'user': username, 'pswd': password});
       if (res.statusCode == 200) {

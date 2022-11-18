@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_grade_manager/Cubit/Auth/auth_cubit.dart';
+import 'package:student_grade_manager/Cubit/StudentData/student_data_cubit.dart';
 import 'package:student_grade_manager/app_navigator.dart';
 
 void main() {
@@ -35,6 +36,9 @@ class _AppState extends State<App> {
       providers: [
         BlocProvider(
           create: (context) => AuthCubit(),
+        ),
+        BlocProvider(
+          create: (context) => StudentDataCubit(),
         ),
       ],
       child: AppNavigator(),
