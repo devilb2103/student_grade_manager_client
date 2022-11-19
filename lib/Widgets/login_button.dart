@@ -41,7 +41,7 @@ class _LoginButtonState extends State<LoginButton> {
             listener: (context, state) {
               if (state is SignedInState) {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => const HomePage()));
                 widget.usernameController.clear();
                 widget.passwordController.clear();
               } else if (state is SignInErrorState) {
@@ -52,7 +52,7 @@ class _LoginButtonState extends State<LoginButton> {
             },
             builder: (context, state) {
               if (state is ProcessingState) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               } else {
                 return const Text("Sign In");
               }

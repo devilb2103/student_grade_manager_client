@@ -16,18 +16,18 @@ class _UsernameTextInputState extends State<UsernameTextInput> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(21),
+        contentPadding: const EdgeInsets.all(21),
         filled: true,
         fillColor: Colors.white,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         hintText: widget.hintText,
       ),
     );

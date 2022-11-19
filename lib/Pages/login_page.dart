@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:student_grade_manager/Cubit/Auth/auth_cubit.dart';
-import 'package:student_grade_manager/Pages/home_page.dart';
 import 'package:student_grade_manager/Widgets/login_button.dart';
 import 'package:student_grade_manager/Widgets/username_text_input.dart';
 import 'package:student_grade_manager/Widgets/password_text_input.dart';
@@ -30,6 +25,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                "Student Grade Manager",
+                style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300),
+              ),
+              SizedBox(height: 27),
               UsernameTextInput(
                   controller: usernameController, hintText: "Enter username"),
               SizedBox(height: 15),

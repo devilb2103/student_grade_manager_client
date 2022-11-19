@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:student_grade_manager/Widgets/side_bar.dart';
 import 'package:student_grade_manager/Widgets/students_table.dart';
 
@@ -24,12 +22,12 @@ class _HomePageState extends State<HomePage> {
             color: Colors.blueGrey[600],
             height: double.maxFinite,
             width: 60,
-            child: SideBar(),
+            child: const SideBar(),
           ),
           Expanded(
               child: Container(
             color: Colors.blueGrey[50],
-            child: StudentTable(),
+            child: const StudentTable(),
           )),
         ],
       )),

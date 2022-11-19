@@ -12,7 +12,7 @@ class _AppNavigatorState extends State<AppNavigator> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      pages: [MaterialPage(child: LoginPage())],
+      pages: const [MaterialPage(child: LoginPage())],
       onPopPage: (route, result) {
         return route.didPop(result);
       },

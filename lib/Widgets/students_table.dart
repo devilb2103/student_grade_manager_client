@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_grade_manager/Cubit/StudentData/student_data_cubit.dart';
+import 'package:student_grade_manager/Widgets/add_student_bottom_sheet.dart';
+import 'package:student_grade_manager/Widgets/edit_marks_bottom_sheet.dart';
 import 'package:student_grade_manager/network_vars.dart';
 
 class StudentTable extends StatefulWidget {
@@ -17,14 +17,18 @@ class _StudentTableState extends State<StudentTable> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(30),
-      child: Container(
+      child: SizedBox(
         width: double.maxFinite,
         height: double.maxFinite,
         child: Container(
           color: Colors.blueGrey[200],
-          child: Column(children: [
+          child: Column(children: const [
             //header
             TableHeader(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 13),
+              child: Divider(),
+            ),
             ScrollableDataContainer(),
           ]),
         ),
@@ -33,10 +37,22 @@ class _StudentTableState extends State<StudentTable> {
   }
 }
 
-class ScrollableDataContainer extends StatelessWidget {
+class ScrollableDataContainer extends StatefulWidget {
   const ScrollableDataContainer({
     super.key,
   });
+
+  @override
+  State<ScrollableDataContainer> createState() =>
+      _ScrollableDataContainerState();
+}
+
+class _ScrollableDataContainerState extends State<ScrollableDataContainer> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<StudentDataCubit>().refreshData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,26 +66,26 @@ class ScrollableDataContainer extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is StudentDataProcessingState) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else {
           return Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 9),
             child: Container(
+              color: Colors.transparent,
               child: ListView.builder(
-                itemCount: Data.length,
+                itemCount: data.length,
                 itemBuilder: (context, index) {
                   return TableItem(
-                    index: int.parse(Data.keys.elementAt(index)),
-                    name: Data[Data.keys.elementAt(index)]["name"],
-                    marks1: Data[Data.keys.elementAt(index)]["grades"][0],
-                    marks2: Data[Data.keys.elementAt(index)]["grades"][1],
-                    marks3: Data[Data.keys.elementAt(index)]["grades"][2],
+                    index: int.parse(data.keys.elementAt(index)),
+                    name: data[data.keys.elementAt(index)]["name"],
+                    marks1: data[data.keys.elementAt(index)]["grades"][0],
+                    marks2: data[data.keys.elementAt(index)]["grades"][1],
+                    marks3: data[data.keys.elementAt(index)]["grades"][2],
                     average:
-                        Data[Data.keys.elementAt(index)]["average"].toString(),
+                        data[data.keys.elementAt(index)]["average"].toString(),
                   );
                 },
               ),
-              color: Colors.transparent,
             ),
           );
         }
@@ -114,8 +130,8 @@ class TableItem extends StatelessWidget {
                     child: Center(
                         child: Text(
                       index.toString(),
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w300),
                     )),
                   ),
                 ),
@@ -129,7 +145,7 @@ class TableItem extends StatelessWidget {
                       child: Center(
                           child: Text(
                         name.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w300),
                       ))),
                 ),
@@ -143,7 +159,7 @@ class TableItem extends StatelessWidget {
                       child: Center(
                           child: Text(
                         marks1.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w300),
                       ))),
                 ),
@@ -157,7 +173,7 @@ class TableItem extends StatelessWidget {
                       child: Center(
                           child: Text(
                         marks2.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w300),
                       ))),
                 ),
@@ -171,7 +187,7 @@ class TableItem extends StatelessWidget {
                       child: Center(
                           child: Text(
                         marks3.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w300),
                       ))),
                 ),
@@ -185,12 +201,12 @@ class TableItem extends StatelessWidget {
                       child: Center(
                           child: Text(
                         average.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w300),
                       ))),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 120,
                 child: Padding(
                   padding: const EdgeInsets.all(0),
@@ -200,7 +216,24 @@ class TableItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           FloatingActionButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              showModalBottomSheet(
+                                  context: context,
+                                  enableDrag:
+                                      true, // <----------- value to change when state changes
+                                  isDismissible:
+                                      true, // <----------- value to change when state changes
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    return EditMarksBottomsheet(
+                                      id: index.toString(),
+                                      marks1: marks1.toString(),
+                                      marks2: marks2.toString(),
+                                      marks3: marks3.toString(),
+                                    );
+                                  });
+                            },
                             elevation: 0,
                             hoverElevation: 0,
                             focusElevation: 0,
@@ -210,7 +243,12 @@ class TableItem extends StatelessWidget {
                             child: const Icon(Icons.edit),
                           ),
                           FloatingActionButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              await context
+                                  .read<StudentDataCubit>()
+                                  .deleteStudent(int.parse(index.toString()));
+                            },
                             elevation: 0,
                             hoverElevation: 0,
                             focusElevation: 0,
@@ -329,7 +367,7 @@ class TableHeader extends StatelessWidget {
                       ))),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 120,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
@@ -337,7 +375,19 @@ class TableHeader extends StatelessWidget {
                       color: Colors.transparent,
                       child: Row(children: [
                         FloatingActionButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            showModalBottomSheet(
+                                context: context,
+                                enableDrag:
+                                    true, // <----------- value to change when state changes
+                                isDismissible:
+                                    true, // <----------- value to change when state changes
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return const AddStudentBottomSheet();
+                                });
+                          },
                           elevation: 0,
                           hoverElevation: 0,
                           focusElevation: 0,
@@ -347,9 +397,11 @@ class TableHeader extends StatelessWidget {
                           child: const Icon(Icons.add),
                         ),
                         FloatingActionButton(
-                          onPressed: () {
+                          onPressed: () async {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            context.read<StudentDataCubit>().refreshData();
+                            await context
+                                .read<StudentDataCubit>()
+                                .refreshData();
                           },
                           elevation: 0,
                           hoverElevation: 0,
