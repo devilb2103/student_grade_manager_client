@@ -6,7 +6,7 @@ import 'package:student_grade_manager/network_vars.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(SignedOutState());
+  AuthCubit() : super(const SignedOutState());
   bool _canTriggerAuthActions = true;
 
   Future<void> signIn(String username, String password) async {
